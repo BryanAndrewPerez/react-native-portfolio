@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView, Modal, Switch } from "react-native";
+import { View, Text, StyleSheet, Image, TouchableOpacity, FlatList, Modal, Switch } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { useTheme } from "../ThemeContext"; 
 
@@ -22,19 +22,30 @@ const Projects = () => {
   }, [isDarkMode]);
 
   const projects = [
-    { id: 1, title: "PILLPAL", description: "A medication management app.", image: pillpal },
-    { id: 2, title: "PennyWise", description: "A budget tracking app.", image: penny },
+    { id: "1", title: "PILLPAL", description: "A medication management app.", image: pillpal },
+    { id: "2", title: "PennyWise", description: "A budget tracking app.", image: penny },
   ];
 
-  
   const openModal = (project) => {
     setSelectedProject(project);
     setModalVisible(true);
   };
 
+  const renderItem = ({ item }) => (
+    <TouchableOpacity
+      style={[styles.projectBox, isDarkMode ? styles.darkBox : styles.lightBox]}
+      onPress={() => openModal(item)}
+    >
+      <Image source={item.image} style={styles.projectImage} />
+      <Text style={[styles.projectTitle, isDarkMode ? styles.darkText : styles.lightText]}>
+        {item.title}
+      </Text>
+    </TouchableOpacity>
+  );
+
   return (
     <View style={[styles.container, isDarkMode ? styles.darkBackground : styles.lightBackground]}>
-     
+      
       <View style={styles.switchContainer}>
         <Text style={[styles.switchText, isDarkMode ? styles.darkText : styles.lightText]}>
           {isDarkMode ? "Dark Mode" : "Light Mode"}
@@ -42,25 +53,16 @@ const Projects = () => {
         <Switch value={isDarkMode} onValueChange={toggleTheme} />
       </View>
 
-      <ScrollView contentContainerStyle={styles.scrollContainer}>
-        {projects.map((project) => (
-          <TouchableOpacity
-            key={project.id}
-            style={[styles.projectBox, isDarkMode ? styles.darkBox : styles.lightBox]}
-            onPress={() => openModal(project)}
-          >
-            <Image source={project.image} style={styles.projectImage} />
-            <Text style={[styles.projectTitle, isDarkMode ? styles.darkText : styles.lightText]}>
-              {project.title}
-            </Text>
-          </TouchableOpacity>
-        ))}
+      <FlatList
+        data={projects}
+        renderItem={renderItem}
+        keyExtractor={(item) => item.id}
+        contentContainerStyle={styles.flatListContainer}
+      />
 
-        
-        <TouchableOpacity style={styles.returnButton} onPress={() => navigation.goBack()}>
-          <Text style={styles.returnButtonText}>Return</Text>
-        </TouchableOpacity>
-      </ScrollView>
+      <TouchableOpacity style={styles.returnButton} onPress={() => navigation.goBack()}>
+        <Text style={styles.returnButtonText}>Return</Text>
+      </TouchableOpacity>
 
       
       <Modal
@@ -94,7 +96,7 @@ const Projects = () => {
 
 const styles = StyleSheet.create({
   container: { flex: 1 },
-  scrollContainer: { paddingVertical: 20, alignItems: "center" },
+  flatListContainer: { paddingVertical: 20, alignItems: "center" },
   switchContainer: { flexDirection: "row", justifyContent: "center", alignItems: "center", paddingVertical: 10 },
   switchText: { fontSize: 16, marginRight: 10 },
   projectBox: {

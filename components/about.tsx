@@ -28,13 +28,20 @@ const About = () => {
         <Switch value={isDarkMode} onValueChange={toggleTheme} />
       </View>
 
-      <Image source={self} style={styles.profileImage} resizeMode="contain" />
+      <Image source={self} style={styles.profileImage} resizeMode="cover" />
 
       <Text style={[styles.name, { color: isDarkMode ? "white" : "black" }]}>Bryan Perez</Text>
       <Text style={[styles.info, { color: isDarkMode ? "#DDDDDD" : "black" }]}>3rd Year Computer Science Student</Text>
       <Text style={[styles.info, { color: isDarkMode ? "#DDDDDD" : "black" }]}>
         Computer Science Program Coordinator at DLSL SG - CITE Council (A.Y. 24-25)
       </Text>
+      <Text style={[styles.info, { color: isDarkMode ? "#DDDDDD" : "black" }]}>
+        Skills:
+      </Text>
+      <Text style={[styles.info, { color: isDarkMode ? "#DDDDDD" : "black" }]}>
+        C++ Programming, React, React Native, Node.js, MongoDB
+      </Text>
+
 
       <View style={styles.socialContainer}>
         <TouchableOpacity onPress={() => Linking.openURL("https://www.facebook.com/bryanandrew.perez.3")}>
@@ -72,10 +79,12 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   profileImage: {
-    width: 300, 
-    height: 400,
+    width: 250, 
+    height: 300, 
     marginBottom: 15,
+    borderRadius: 10,
   },
+  
   name: {
     fontSize: 22,
     fontWeight: "bold",
