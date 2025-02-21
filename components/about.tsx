@@ -1,12 +1,24 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { StyleSheet, Text, View, Image, TouchableOpacity, Linking, Switch } from "react-native";
 import { FontAwesome } from "@expo/vector-icons"; 
+import { useNavigation } from "@react-navigation/native"; 
 import { useTheme } from "../ThemeContext"; 
 
 const self = require("../assets/self.jpg");
 
 const About = () => {
-  const { isDarkMode, toggleTheme } = useTheme(); 
+  const navigation = useNavigation();
+  const { isDarkMode, toggleTheme } = useTheme();
+
+  // Update header color based on dark mode
+  useEffect(() => {
+    navigation.setOptions({
+      headerStyle: {
+        backgroundColor: isDarkMode ? "#000" : "#fff",
+      },
+      headerTintColor: isDarkMode ? "#fff" : "#000",
+    });
+  }, [isDarkMode]);
 
   return (
     <View style={[styles.container, { backgroundColor: isDarkMode ? "#121212" : "white" }]}>
@@ -16,17 +28,14 @@ const About = () => {
         <Switch value={isDarkMode} onValueChange={toggleTheme} />
       </View>
 
-      
       <Image source={self} style={styles.profileImage} resizeMode="contain" />
 
-      
       <Text style={[styles.name, { color: isDarkMode ? "white" : "black" }]}>Bryan Perez</Text>
       <Text style={[styles.info, { color: isDarkMode ? "#DDDDDD" : "black" }]}>3rd Year Computer Science Student</Text>
       <Text style={[styles.info, { color: isDarkMode ? "#DDDDDD" : "black" }]}>
         Computer Science Program Coordinator at DLSL SG - CITE Council (A.Y. 24-25)
       </Text>
 
-      
       <View style={styles.socialContainer}>
         <TouchableOpacity onPress={() => Linking.openURL("https://www.facebook.com/bryanandrew.perez.3")}>
           <FontAwesome name="facebook" size={35} color={isDarkMode ? "white" : "black"} />
